@@ -5,7 +5,6 @@ import {
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
   ArcElement
 } from "chart.js";
 
@@ -16,7 +15,6 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
   ArcElement
 );
 
@@ -60,55 +58,45 @@ export default function PurchasePredictionFrontend() {
     }
   };
 
-
-  /* ---------------- GRAPHS ---------------- */
+  /* ----------- GRAPH DATA ----------- */
 
   const purchaseChart = {
     labels:["Purchased","Not Purchased"],
-    datasets:[
-      {
-        label:"Customers",
-        data:[120,130],
-        backgroundColor:["#0ea5e9","#64748b"]
-      }
-    ]
+    datasets:[{
+      data:[120,130],
+      backgroundColor:["#22c55e","#ef4444"]
+    }]
   };
 
-  const timeSpentChart = {
+  const timeChart = {
     labels:["0-5","5-10","10-15","15-20","20+"],
-    datasets:[
-      {
-        label:"Users",
-        data:[15,40,80,60,20],
-        backgroundColor:"#0ea5e9"
-      }
-    ]
+    datasets:[{
+      label:"Users",
+      data:[10,40,80,60,20],
+      backgroundColor:"#3b82f6"
+    }]
   };
 
-  const cartValueChart = {
+  const cartChart = {
     labels:["0-1000","1000-3000","3000-5000","5000+"],
-    datasets:[
-      {
-        label:"Cart Value Distribution",
-        data:[40,100,60,20],
-        backgroundColor:"#22c55e"
-      }
-    ]
+    datasets:[{
+      label:"Cart Distribution",
+      data:[20,80,60,30],
+      backgroundColor:"#8b5cf6"
+    }]
   };
 
   const scatterData = {
-    datasets:[
-      {
-        label:"Pages vs Cart Value",
-        data:[
-          {x:5,y:2000},
-          {x:10,y:3500},
-          {x:7,y:1800},
-          {x:12,y:4200}
-        ],
-        backgroundColor:"#f97316"
-      }
-    ]
+    datasets:[{
+      label:"Pages vs Cart Value",
+      data:[
+        {x:5,y:2000},
+        {x:10,y:3500},
+        {x:7,y:1800},
+        {x:12,y:4200}
+      ],
+      backgroundColor:"#f97316"
+    }]
   };
 
   const featureImportance = {
@@ -117,103 +105,143 @@ export default function PurchasePredictionFrontend() {
       "Pages Viewed",
       "Cart Value",
       "Purchase Frequency",
-      "Average Cart",
+      "Avg Cart",
       "Cart Log",
       "Time Bin"
     ],
-    datasets:[
-      {
-        label:"Importance",
-        data:[0.20,0.12,0.18,0.25,0.10,0.08,0.07],
-        backgroundColor:"#8b5cf6"
-      }
-    ]
+    datasets:[{
+      label:"Importance",
+      data:[0.20,0.12,0.18,0.25,0.10,0.08,0.07],
+      backgroundColor:"#0ea5e9"
+    }]
   };
-
 
   return (
 
     <div style={page}>
 
-      <h1 style={{color:"white"}}>Purchase Prediction Dashboard</h1>
+      {/* HEADER */}
 
-      {/* INPUT CARD */}
+      <div style={header}>
+        <h1>AI Purchase Prediction Dashboard</h1>
+        <p>Machine Learning powered customer purchase prediction</p>
+      </div>
 
-      <div style={card}>
 
-        <h2>Prediction Input</h2>
+      {/* METRICS */}
 
-        <input
-        placeholder="Time Spent"
-        value={timeSpent}
-        onChange={(e)=>setTimeSpent(e.target.value)}
-        style={input}
-        />
+      <div style={metricsGrid}>
 
-        <input
-        placeholder="Pages Viewed"
-        value={pagesViewed}
-        onChange={(e)=>setPagesViewed(e.target.value)}
-        style={input}
-        />
+        <div style={metricCard}>
+          <h3>Dataset</h3>
+          <p>250 Records</p>
+        </div>
 
-        <input
-        placeholder="Cart Value"
-        value={cartValue}
-        onChange={(e)=>setCartValue(e.target.value)}
-        style={input}
-        />
+        <div style={metricCard}>
+          <h3>Features</h3>
+          <p>7 Variables</p>
+        </div>
 
-        <input
-        placeholder="Purchase Frequency"
-        value={purchaseFrequency}
-        onChange={(e)=>setPurchaseFrequency(e.target.value)}
-        style={input}
-        />
+        <div style={metricCard}>
+          <h3>Model</h3>
+          <p>Random Forest</p>
+        </div>
 
-        <button onClick={handlePredict} style={button}>
-          Run Prediction
-        </button>
+        <div style={metricCard}>
+          <h3>Charts</h3>
+          <p>5 Analytics</p>
+        </div>
 
       </div>
 
 
-      {/* RESULT CARD */}
+      {/* INPUT + RESULT */}
 
-      <div style={card}>
+      <div style={mainGrid}>
 
-        <h2>Prediction Result</h2>
+        <div style={card}>
 
-        <h1 style={{color:"#0ea5e9"}}>
-          {prediction}
-        </h1>
+          <h2>Prediction Input</h2>
 
-        <p>Confidence {confidence}%</p>
+          <input
+          placeholder="Time Spent"
+          value={timeSpent}
+          onChange={(e)=>setTimeSpent(e.target.value)}
+          style={input}
+          />
+
+          <input
+          placeholder="Pages Viewed"
+          value={pagesViewed}
+          onChange={(e)=>setPagesViewed(e.target.value)}
+          style={input}
+          />
+
+          <input
+          placeholder="Cart Value"
+          value={cartValue}
+          onChange={(e)=>setCartValue(e.target.value)}
+          style={input}
+          />
+
+          <input
+          placeholder="Purchase Frequency"
+          value={purchaseFrequency}
+          onChange={(e)=>setPurchaseFrequency(e.target.value)}
+          style={input}
+          />
+
+          <button onClick={handlePredict} style={button}>
+            Run Prediction
+          </button>
+
+        </div>
+
+        <div style={card}>
+
+          <h2>Prediction Result</h2>
+
+          <h1 style={{color:"#3b82f6"}}>
+            {prediction}
+          </h1>
+
+          <p>Confidence</p>
+
+          <div style={progressBg}>
+            <div style={{
+              ...progressBar,
+              width:`${confidence}%`
+            }}/>
+          </div>
+
+          <p>{confidence}%</p>
+
+        </div>
 
       </div>
 
 
       {/* GRAPHS */}
 
-      <div style={grid}>
+      <div style={chartsGrid}>
 
         <div style={chartCard}>
-          <h3>Purchase Status Distribution</h3>
+          <h3>Purchase Distribution</h3>
           <Pie data={purchaseChart}/>
         </div>
 
         <div style={chartCard}>
           <h3>Time Spent Distribution</h3>
-          <Bar data={timeSpentChart}/>
+          <Bar data={timeChart}/>
         </div>
 
         <div style={chartCard}>
           <h3>Cart Value Distribution</h3>
-          <Bar data={cartValueChart}/>
+          <Bar data={cartChart}/>
         </div>
 
         <div style={chartCard}>
-          <h3>Pages Viewed vs Cart Value</h3>
+          <h3>Pages vs Cart Value</h3>
           <Scatter data={scatterData}/>
         </div>
 
@@ -233,16 +261,48 @@ export default function PurchasePredictionFrontend() {
 
 const page={
   minHeight:"100vh",
-  background:"linear-gradient(135deg,#0f172a,#0ea5e9)",
   padding:"40px",
+  background:"linear-gradient(135deg,#0f172a,#2563eb)",
   fontFamily:"Segoe UI"
+};
+
+const header={
+  textAlign:"center",
+  color:"white",
+  marginBottom:"30px"
+};
+
+const metricsGrid={
+  display:"grid",
+  gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",
+  gap:"20px",
+  marginBottom:"30px"
+};
+
+const metricCard={
+  background:"white",
+  padding:"20px",
+  borderRadius:"10px",
+  textAlign:"center"
+};
+
+const mainGrid={
+  display:"grid",
+  gridTemplateColumns:"2fr 1fr",
+  gap:"20px",
+  marginBottom:"30px"
+};
+
+const chartsGrid={
+  display:"grid",
+  gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",
+  gap:"20px"
 };
 
 const card={
   background:"white",
-  padding:"20px",
-  borderRadius:"12px",
-  marginBottom:"20px"
+  padding:"25px",
+  borderRadius:"12px"
 };
 
 const chartCard={
@@ -251,25 +311,30 @@ const chartCard={
   borderRadius:"12px"
 };
 
-const grid={
-  display:"grid",
-  gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",
-  gap:"20px"
-};
-
 const input={
-  display:"block",
   width:"100%",
-  marginBottom:"10px",
-  padding:"10px"
+  padding:"12px",
+  marginBottom:"10px"
 };
 
 const button={
-  background:"#0ea5e9",
+  width:"100%",
+  padding:"12px",
+  background:"#3b82f6",
   color:"white",
   border:"none",
-  padding:"12px",
-  width:"100%",
   borderRadius:"6px",
   cursor:"pointer"
+};
+
+const progressBg={
+  height:"10px",
+  background:"#e2e8f0",
+  borderRadius:"6px",
+  overflow:"hidden"
+};
+
+const progressBar={
+  height:"100%",
+  background:"#22c55e"
 };
