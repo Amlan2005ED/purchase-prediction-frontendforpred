@@ -8,7 +8,7 @@ import {
   ArcElement
 } from "chart.js";
 
-import { Bar, Pie, Scatter } from "react-chartjs-2";
+import { Bar, Pie, Scatter, Doughnut } from "react-chartjs-2";
 
 ChartJS.register(
   BarElement,
@@ -27,8 +27,11 @@ export default function PurchasePredictionFrontend() {
 
   const [prediction,setPrediction]=useState("No Prediction");
   const [confidence,setConfidence]=useState(0);
+  const [loading,setLoading]=useState(false);
 
   const handlePredict = async () => {
+
+    setLoading(true);
 
     try{
 
@@ -54,48 +57,19 @@ export default function PurchasePredictionFrontend() {
       setConfidence(Math.round(data.confidence*100));
 
     }catch(e){
-      alert("Backend may be sleeping. Try again.");
+      alert("Backend waking up. Try again.");
     }
+
+    setLoading(false);
   };
 
-  /* ----------- GRAPH DATA ----------- */
+  /* ---------- CHART DATA ---------- */
 
   const purchaseChart = {
     labels:["Purchased","Not Purchased"],
     datasets:[{
       data:[120,130],
       backgroundColor:["#22c55e","#ef4444"]
-    }]
-  };
-
-  const timeChart = {
-    labels:["0-5","5-10","10-15","15-20","20+"],
-    datasets:[{
-      label:"Users",
-      data:[10,40,80,60,20],
-      backgroundColor:"#3b82f6"
-    }]
-  };
-
-  const cartChart = {
-    labels:["0-1000","1000-3000","3000-5000","5000+"],
-    datasets:[{
-      label:"Cart Distribution",
-      data:[20,80,60,30],
-      backgroundColor:"#8b5cf6"
-    }]
-  };
-
-  const scatterData = {
-    datasets:[{
-      label:"Pages vs Cart Value",
-      data:[
-        {x:5,y:2000},
-        {x:10,y:3500},
-        {x:7,y:1800},
-        {x:12,y:4200}
-      ],
-      backgroundColor:"#f97316"
     }]
   };
 
@@ -112,142 +86,201 @@ export default function PurchasePredictionFrontend() {
     datasets:[{
       label:"Importance",
       data:[0.20,0.12,0.18,0.25,0.10,0.08,0.07],
-      backgroundColor:"#0ea5e9"
+      backgroundColor:"#3b82f6"
     }]
+  };
+
+  const scatterData = {
+    datasets:[{
+      label:"Pages vs Cart Value",
+      data:[
+        {x:5,y:2000},
+        {x:10,y:3500},
+        {x:7,y:1800},
+        {x:12,y:4200}
+      ],
+      backgroundColor:"#f97316"
+    }]
+  };
+
+  const confusionMatrix = {
+    labels:["Pred No","Pred Yes"],
+    datasets:[
+      {
+        label:"Actual No",
+        data:[45,10],
+        backgroundColor:"#ef4444"
+      },
+      {
+        label:"Actual Yes",
+        data:[8,37],
+        backgroundColor:"#22c55e"
+      }
+    ]
+  };
+
+  const accuracyGauge = {
+    labels:["Accuracy","Remaining"],
+    datasets:[
+      {
+        data:[92,8],
+        backgroundColor:["#22c55e","#1e293b"]
+      }
+    ]
   };
 
   return (
 
-    <div style={page}>
+    <div style={layout}>
 
-      {/* HEADER */}
+      {/* SIDEBAR */}
 
-      <div style={header}>
-        <h1>AI Purchase Prediction Dashboard</h1>
-        <p>Machine Learning powered customer purchase prediction</p>
-      </div>
+      <div style={sidebar}>
 
+        <h2>AI Dashboard</h2>
 
-      {/* METRICS */}
-
-      <div style={metricsGrid}>
-
-        <div style={metricCard}>
-          <h3>Dataset</h3>
-          <p>250 Records</p>
-        </div>
-
-        <div style={metricCard}>
-          <h3>Features</h3>
-          <p>7 Variables</p>
-        </div>
-
-        <div style={metricCard}>
-          <h3>Model</h3>
-          <p>Random Forest</p>
-        </div>
-
-        <div style={metricCard}>
-          <h3>Charts</h3>
-          <p>5 Analytics</p>
-        </div>
+        <p>Overview</p>
+        <p>Prediction</p>
+        <p>Analytics</p>
+        <p>Model Metrics</p>
 
       </div>
 
 
-      {/* INPUT + RESULT */}
+      {/* MAIN CONTENT */}
 
-      <div style={mainGrid}>
+      <div style={mainContent}>
 
-        <div style={card}>
+        {/* HEADER */}
 
-          <h2>Prediction Input</h2>
-
-          <input
-          placeholder="Time Spent"
-          value={timeSpent}
-          onChange={(e)=>setTimeSpent(e.target.value)}
-          style={input}
-          />
-
-          <input
-          placeholder="Pages Viewed"
-          value={pagesViewed}
-          onChange={(e)=>setPagesViewed(e.target.value)}
-          style={input}
-          />
-
-          <input
-          placeholder="Cart Value"
-          value={cartValue}
-          onChange={(e)=>setCartValue(e.target.value)}
-          style={input}
-          />
-
-          <input
-          placeholder="Purchase Frequency"
-          value={purchaseFrequency}
-          onChange={(e)=>setPurchaseFrequency(e.target.value)}
-          style={input}
-          />
-
-          <button onClick={handlePredict} style={button}>
-            Run Prediction
-          </button>
-
+        <div style={header}>
+          <h1>Customer Purchase Prediction</h1>
         </div>
 
-        <div style={card}>
 
-          <h2>Prediction Result</h2>
+        {/* METRICS */}
 
-          <h1 style={{color:"#3b82f6"}}>
-            {prediction}
-          </h1>
+        <div style={metricsGrid}>
 
-          <p>Confidence</p>
-
-          <div style={progressBg}>
-            <div style={{
-              ...progressBar,
-              width:`${confidence}%`
-            }}/>
+          <div style={metricCard}>
+            <h3>Dataset</h3>
+            <p>250 Rows</p>
           </div>
 
-          <p>{confidence}%</p>
+          <div style={metricCard}>
+            <h3>Features</h3>
+            <p>7</p>
+          </div>
+
+          <div style={metricCard}>
+            <h3>Model</h3>
+            <p>Random Forest</p>
+          </div>
+
+          <div style={metricCard}>
+            <h3>Accuracy</h3>
+            <p>92%</p>
+          </div>
 
         </div>
 
-      </div>
+
+        {/* INPUT + RESULT */}
+
+        <div style={mainGrid}>
+
+          <div style={card}>
+
+            <h2>Prediction Input</h2>
+
+            <input
+            placeholder="Time Spent"
+            value={timeSpent}
+            onChange={(e)=>setTimeSpent(e.target.value)}
+            style={input}
+            />
+
+            <input
+            placeholder="Pages Viewed"
+            value={pagesViewed}
+            onChange={(e)=>setPagesViewed(e.target.value)}
+            style={input}
+            />
+
+            <input
+            placeholder="Cart Value"
+            value={cartValue}
+            onChange={(e)=>setCartValue(e.target.value)}
+            style={input}
+            />
+
+            <input
+            placeholder="Purchase Frequency"
+            value={purchaseFrequency}
+            onChange={(e)=>setPurchaseFrequency(e.target.value)}
+            style={input}
+            />
+
+            <button onClick={handlePredict} style={button}>
+              {loading ? "Running Model..." : "Run Prediction"}
+            </button>
+
+          </div>
 
 
-      {/* GRAPHS */}
+          <div style={card}>
 
-      <div style={chartsGrid}>
+            <h2>Prediction Result</h2>
 
-        <div style={chartCard}>
-          <h3>Purchase Distribution</h3>
-          <Pie data={purchaseChart}/>
+            <h1 style={{color:"#3b82f6"}}>
+              {prediction}
+            </h1>
+
+            <p>Confidence</p>
+
+            <div style={progressBg}>
+              <div style={{
+                ...progressBar,
+                width:`${confidence}%`
+              }}/>
+            </div>
+
+            <p>{confidence}%</p>
+
+          </div>
+
         </div>
 
-        <div style={chartCard}>
-          <h3>Time Spent Distribution</h3>
-          <Bar data={timeChart}/>
-        </div>
 
-        <div style={chartCard}>
-          <h3>Cart Value Distribution</h3>
-          <Bar data={cartChart}/>
-        </div>
+        {/* ANALYTICS */}
 
-        <div style={chartCard}>
-          <h3>Pages vs Cart Value</h3>
-          <Scatter data={scatterData}/>
-        </div>
+        <div style={chartsGrid}>
 
-        <div style={chartCard}>
-          <h3>Feature Importance</h3>
-          <Bar data={featureImportance}/>
+          <div style={chartCard}>
+            <h3>Purchase Distribution</h3>
+            <Pie data={purchaseChart}/>
+          </div>
+
+          <div style={chartCard}>
+            <h3>Feature Importance</h3>
+            <Bar data={featureImportance}/>
+          </div>
+
+          <div style={chartCard}>
+            <h3>Pages vs Cart Value</h3>
+            <Scatter data={scatterData}/>
+          </div>
+
+          <div style={chartCard}>
+            <h3>Confusion Matrix</h3>
+            <Bar data={confusionMatrix}/>
+          </div>
+
+          <div style={chartCard}>
+            <h3>Model Accuracy</h3>
+            <Doughnut data={accuracyGauge}/>
+          </div>
+
         </div>
 
       </div>
@@ -259,31 +292,41 @@ export default function PurchasePredictionFrontend() {
 
 /* ---------- STYLES ---------- */
 
-const page={
+const layout={
+  display:"flex",
   minHeight:"100vh",
+  fontFamily:"Segoe UI",
+  background:"#0f172a"
+};
+
+const sidebar={
+  width:"220px",
+  background:"#020617",
+  color:"white",
+  padding:"30px"
+};
+
+const mainContent={
+  flex:1,
   padding:"40px",
-  background:"linear-gradient(135deg,#0f172a,#2563eb)",
-  fontFamily:"Segoe UI"
+  color:"white"
 };
 
 const header={
-  textAlign:"center",
-  color:"white",
   marginBottom:"30px"
 };
 
 const metricsGrid={
   display:"grid",
-  gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",
+  gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",
   gap:"20px",
   marginBottom:"30px"
 };
 
 const metricCard={
-  background:"white",
+  background:"#1e293b",
   padding:"20px",
-  borderRadius:"10px",
-  textAlign:"center"
+  borderRadius:"10px"
 };
 
 const mainGrid={
@@ -300,15 +343,15 @@ const chartsGrid={
 };
 
 const card={
-  background:"white",
+  background:"#1e293b",
   padding:"25px",
-  borderRadius:"12px"
+  borderRadius:"10px"
 };
 
 const chartCard={
-  background:"white",
+  background:"#1e293b",
   padding:"20px",
-  borderRadius:"12px"
+  borderRadius:"10px"
 };
 
 const input={
@@ -321,15 +364,14 @@ const button={
   width:"100%",
   padding:"12px",
   background:"#3b82f6",
-  color:"white",
   border:"none",
-  borderRadius:"6px",
-  cursor:"pointer"
+  color:"white",
+  borderRadius:"6px"
 };
 
 const progressBg={
   height:"10px",
-  background:"#e2e8f0",
+  background:"#334155",
   borderRadius:"6px",
   overflow:"hidden"
 };
