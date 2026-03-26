@@ -1,5 +1,5 @@
 {
-  "name": "purchase-dashboard",
+  "name": "purchase-prediction-dashboard",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,11 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "chart.js": "^4.4.0",
+    "react-chartjs-2": "^5.2.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
-    "vite": "^5.3.0"
+    "vite": "^5.0.0"
   }
 }
