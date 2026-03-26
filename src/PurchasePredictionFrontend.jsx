@@ -63,8 +63,6 @@ export default function PurchasePredictionFrontend() {
     setLoading(false);
   };
 
-  /* ---------- CHART DATA ---------- */
-
   const purchaseChart = {
     labels:["Purchased","Not Purchased"],
     datasets:[{
@@ -129,11 +127,20 @@ export default function PurchasePredictionFrontend() {
     ]
   };
 
+  const correlationData = {
+    labels:["Time","Pages","Cart","Frequency"],
+    datasets:[
+      {
+        label:"Correlation",
+        data:[0.72,0.55,0.81,0.66],
+        backgroundColor:"#14b8a6"
+      }
+    ]
+  };
+
   return (
 
     <div style={layout}>
-
-      {/* SIDEBAR */}
 
       <div style={sidebar}>
 
@@ -146,19 +153,11 @@ export default function PurchasePredictionFrontend() {
 
       </div>
 
-
-      {/* MAIN CONTENT */}
-
       <div style={mainContent}>
-
-        {/* HEADER */}
 
         <div style={header}>
           <h1>Customer Purchase Prediction</h1>
         </div>
-
-
-        {/* METRICS */}
 
         <div style={metricsGrid}>
 
@@ -184,8 +183,29 @@ export default function PurchasePredictionFrontend() {
 
         </div>
 
+        <div style={statsGrid}>
 
-        {/* INPUT + RESULT */}
+          <div style={statCard}>
+            <h3>Avg Time Spent</h3>
+            <p>12.4</p>
+          </div>
+
+          <div style={statCard}>
+            <h3>Avg Pages Viewed</h3>
+            <p>8.1</p>
+          </div>
+
+          <div style={statCard}>
+            <h3>Avg Cart Value</h3>
+            <p>$2475</p>
+          </div>
+
+          <div style={statCard}>
+            <h3>Purchase Frequency</h3>
+            <p>3.2</p>
+          </div>
+
+        </div>
 
         <div style={mainGrid}>
 
@@ -227,7 +247,6 @@ export default function PurchasePredictionFrontend() {
 
           </div>
 
-
           <div style={card}>
 
             <h2>Prediction Result</h2>
@@ -251,8 +270,20 @@ export default function PurchasePredictionFrontend() {
 
         </div>
 
+        <div style={card}>
 
-        {/* ANALYTICS */}
+          <h2>Model Training Summary</h2>
+
+          <ul>
+          <li>Missing values handled using median</li>
+          <li>Outliers removed using IQR</li>
+          <li>Feature engineering applied</li>
+          <li>Random Forest optimized with GridSearchCV</li>
+          <li>Training / Testing split 80/20</li>
+          <li>Resampling used to balance classes</li>
+          </ul>
+
+        </div>
 
         <div style={chartsGrid}>
 
@@ -281,6 +312,11 @@ export default function PurchasePredictionFrontend() {
             <Doughnut data={accuracyGauge}/>
           </div>
 
+          <div style={chartCard}>
+            <h3>Feature Correlation</h3>
+            <Bar data={correlationData}/>
+          </div>
+
         </div>
 
       </div>
@@ -289,94 +325,55 @@ export default function PurchasePredictionFrontend() {
   );
 }
 
-
-/* ---------- STYLES ---------- */
-
-const layout={
-  display:"flex",
-  minHeight:"100vh",
-  fontFamily:"Segoe UI",
-  background:"#0f172a"
-};
-
-const sidebar={
-  width:"220px",
-  background:"#020617",
-  color:"white",
-  padding:"30px"
-};
-
-const mainContent={
-  flex:1,
-  padding:"40px",
-  color:"white"
-};
-
-const header={
-  marginBottom:"30px"
-};
+const layout={display:"flex",minHeight:"100vh",fontFamily:"Segoe UI",background:"#0f172a"};
+const sidebar={width:"220px",background:"#020617",color:"white",padding:"30px"};
+const mainContent={flex:1,padding:"40px",color:"white"};
+const header={marginBottom:"30px"};
 
 const metricsGrid={
-  display:"grid",
-  gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",
-  gap:"20px",
-  marginBottom:"30px"
+display:"grid",
+gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",
+gap:"20px",
+marginBottom:"30px"
 };
 
-const metricCard={
-  background:"#1e293b",
-  padding:"20px",
-  borderRadius:"10px"
+const metricCard={background:"#1e293b",padding:"20px",borderRadius:"10px"};
+
+const statsGrid={
+display:"grid",
+gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",
+gap:"20px",
+marginBottom:"30px"
 };
+
+const statCard={background:"#1e293b",padding:"20px",borderRadius:"10px",textAlign:"center"};
 
 const mainGrid={
-  display:"grid",
-  gridTemplateColumns:"2fr 1fr",
-  gap:"20px",
-  marginBottom:"30px"
+display:"grid",
+gridTemplateColumns:"2fr 1fr",
+gap:"20px",
+marginBottom:"30px"
 };
 
 const chartsGrid={
-  display:"grid",
-  gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",
-  gap:"20px"
+display:"grid",
+gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",
+gap:"20px"
 };
 
-const card={
-  background:"#1e293b",
-  padding:"25px",
-  borderRadius:"10px"
-};
+const card={background:"#1e293b",padding:"25px",borderRadius:"10px"};
+const chartCard={background:"#1e293b",padding:"20px",borderRadius:"10px"};
 
-const chartCard={
-  background:"#1e293b",
-  padding:"20px",
-  borderRadius:"10px"
-};
-
-const input={
-  width:"100%",
-  padding:"12px",
-  marginBottom:"10px"
-};
+const input={width:"100%",padding:"12px",marginBottom:"10px"};
 
 const button={
-  width:"100%",
-  padding:"12px",
-  background:"#3b82f6",
-  border:"none",
-  color:"white",
-  borderRadius:"6px"
+width:"100%",
+padding:"12px",
+background:"#3b82f6",
+border:"none",
+color:"white",
+borderRadius:"6px"
 };
 
-const progressBg={
-  height:"10px",
-  background:"#334155",
-  borderRadius:"6px",
-  overflow:"hidden"
-};
-
-const progressBar={
-  height:"100%",
-  background:"#22c55e"
-};
+const progressBg={height:"10px",background:"#334155",borderRadius:"6px",overflow:"hidden"};
+const progressBar={height:"100%",background:"#22c55e"};
