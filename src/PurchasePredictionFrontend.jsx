@@ -58,8 +58,10 @@ export default function PurchasePredictionFrontend() {
       setConfidence(Math.round(data.confidence*100));
 
     }catch(e){
-      alert("Backend is waking up (first request may take ~30 sec). Try again.");
+      console.error("ERROR:", e);
+      alert("Something went wrong. Check console.");
     }
+
 
     setLoading(false);
   };
