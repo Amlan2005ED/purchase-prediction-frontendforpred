@@ -34,7 +34,7 @@ export default function PurchasePredictionFrontend() {
     setLoading(true);
 
     try{
-      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const API_URL = import.meta.env.VITE_API_URL;
 
       console.log("API URL:", API_URL); // debug (remove later)
 
