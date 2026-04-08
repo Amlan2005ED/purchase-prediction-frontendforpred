@@ -34,8 +34,12 @@ export default function PurchasePredictionFrontend() {
     setLoading(true);
 
     try{
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+      console.log("API URL:", API_URL); // debug (remove later)
+
       const response = await fetch(
-        "https://purchase-prediction-backend.onrender.com/predict",
+        `${API_URL}/predict`,
         {
           method:"POST",
           headers:{ "Content-Type":"application/json" },
@@ -49,11 +53,12 @@ export default function PurchasePredictionFrontend() {
       );
 
       const data = await response.json();
+
       setPrediction(data.prediction);
       setConfidence(Math.round(data.confidence*100));
 
     }catch(e){
-      alert("Backend waking up. Try again.");
+      alert("Backend is waking up (first request may take ~30 sec). Try again.");
     }
 
     setLoading(false);
